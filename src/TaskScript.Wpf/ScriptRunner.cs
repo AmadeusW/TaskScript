@@ -26,7 +26,7 @@ namespace TaskScript.Wpf
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     Arguments = $"{path} -- {args}",
-                    //CreateNoWindow = true,
+                    CreateNoWindow = true,
                 };
 
                 using (var process = new Process()

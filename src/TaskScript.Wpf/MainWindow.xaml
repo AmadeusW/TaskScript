@@ -11,6 +11,9 @@
         <Style TargetType="Button">
             <Setter Property="Padding" Value="10 4" />
         </Style>
+        <Style TargetType="ToggleButton">
+            <Setter Property="Padding" Value="10 4" />
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -24,11 +27,16 @@
 
         <StackPanel Orientation="Horizontal">
 
+            <ToggleButton x:Name="AlwaysOnTopButton"
+                          Content="*" 
+                          Click="Pin_Click" />
             <StackPanel x:Name="Scripts" 
                     Orientation="Horizontal" >
 
             </StackPanel>
-            <Button Content="--" Click="Params_Click" DockPanel.Dock="Left"/>
+            <Button x:Name="ExpandParamsButton"
+                    Content="--" 
+                    Click="Params_Click" />
         </StackPanel>
 
         <TextBox x:Name="Params" 

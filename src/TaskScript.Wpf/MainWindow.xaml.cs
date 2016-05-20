@@ -45,6 +45,7 @@ namespace TaskScript.Wpf
             _runner = new ScriptRunner(this);
             Settings.Initialize();
 
+            bool hasScripts = false;
             foreach (dynamic script in Settings.Current["scripts"])
             {
                 var button = new Button()
@@ -75,12 +76,23 @@ namespace TaskScript.Wpf
                     script.args = args;
                 };
                 Scripts.Children.Add(button);
+                hasScripts = true;
+            }
+
+            if (!hasScripts)
+            {
+                ExpandParamsButton.Visibility = Visibility.Collapsed;
             }
         }
 
         private void Params_Click(object sender, RoutedEventArgs e)
         {
             Params.Visibility = Visibility.Visible;
+        }
+
+        private void Pin_Click(object sender, RoutedEventArgs e)
+        {
+            this.Topmost = AlwaysOnTopButton.IsChecked == true;
         }
 
         protected override void OnClosing(CancelEventArgs e)
