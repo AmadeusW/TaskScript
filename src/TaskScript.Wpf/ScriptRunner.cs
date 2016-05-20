@@ -10,7 +10,6 @@ namespace TaskScript.Wpf
     class ScriptRunner
     {
         private MainWindow _mainWindow;
-        private Process _process;
 
         public ScriptRunner(MainWindow mainWindow)
         {
@@ -29,24 +28,26 @@ namespace TaskScript.Wpf
                     Arguments = $"{path} -- {args}",
                     //CreateNoWindow = true,
                 };
-                _process = new Process()
+
+                using (var process = new Process()
                 {
                     StartInfo = startInfo
-                };
-                _process.OutputDataReceived += (s, e) => _mainWindow.Output = e.Data;
-                _process.Start();
-                _process.BeginOutputReadLine();
+                })
+                { 
+                    process.OutputDataReceived += (s, e) => _mainWindow.Output = e.Data;
+                    process.Start();
+                    process.BeginOutputReadLine();
 
-                //_process.StandardInput.WriteLine($);
+                    //_process.StandardInput.WriteLine($);
 
-                _process.WaitForExit();
+                    process.WaitForExit();
+                }
             });
         }
 
         internal void Stop()
         {
-            if (!_process.HasExited)
-                _process.Kill();
+            // TODO: keep track of open processes and kill them
         }
     }
 }
