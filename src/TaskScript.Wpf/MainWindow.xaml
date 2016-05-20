@@ -6,12 +6,38 @@
         xmlns:local="clr-namespace:TaskScript.Wpf"
         mc:Ignorable="d"
         Title="TaskScript" 
-        Height="80" Width="200">
-    <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Horizontal">
-            <Button Content="Program 1" Click="Button1_Click" />
-            <Button Content="Program 2" Click="Button2_Click" />
+        Height="100" Width="300">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="10 4" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Horizontal" >
+            <Button Content="add" Click="Button1_Click" DockPanel.Dock="Left"/>
+            <Button Content="cmd" Click="Button2_Click" DockPanel.Dock="Left"/>
+            <Button Content="pow" Click="Button3_Click" DockPanel.Dock="Left"/>
+            <Button Content="--" Click="Params_Click" DockPanel.Dock="Left"/>
         </StackPanel>
-        <TextBlock x:Name="Result" />
-    </StackPanel>
+
+        <TextBox x:Name="Params" 
+                   KeyDown="Params_KeyDown" 
+                   Visibility="Collapsed"  
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Center"
+                   Grid.Column="1" />
+
+        <TextBlock x:Name="Result" 
+                   Grid.ColumnSpan="2"
+                   Grid.Row="1" />
+    </Grid>
 </Window>
