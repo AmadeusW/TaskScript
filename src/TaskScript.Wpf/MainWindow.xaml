@@ -21,11 +21,13 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <StackPanel Orientation="Horizontal" >
-            <Button Content="add" Click="Button1_Click" DockPanel.Dock="Left"/>
-            <Button Content="cmd" Click="Button2_Click" DockPanel.Dock="Left"/>
-            <Button Content="pow" Click="Button3_Click" DockPanel.Dock="Left"/>
+
+        <StackPanel Orientation="Horizontal">
+
+            <StackPanel x:Name="Scripts" 
+                    Orientation="Horizontal" >
+
+            </StackPanel>
             <Button Content="--" Click="Params_Click" DockPanel.Dock="Left"/>
         </StackPanel>
 

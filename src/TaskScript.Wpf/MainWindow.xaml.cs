@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,21 +43,39 @@ namespace TaskScript.Wpf
         {
             InitializeComponent();
             _runner = new ScriptRunner(this);
-        }
+            Settings.Initialize();
 
-        private void Button1_Click(object sender, RoutedEventArgs e)
-        {
-            _runner.RunScript(@"C:\Users\amade\Documents\test.csx", _params ?? Params.Text);
-        }
+            foreach (dynamic script in Settings.Current["scripts"])
+            {
+                var button = new Button()
+                {
+                    Content = script.label.ToString(),
+                    Tag = script.label.ToString()
+                };
+                button.Click += (o, e) =>
+                {
+                    string args = String.Empty;
+                    if (Params.Visibility == Visibility.Visible
+                    && !String.IsNullOrWhiteSpace(Params.Text))
+                    {
+                        args = Params.Text;
+                    }
+                    else
+                    {
+                        args = script.args.ToString();
+                    }
 
-        private void Button2_Click(object sender, RoutedEventArgs e)
-        {
-            _runner.RunScript(@"C:\Users\amade\Documents\test2.csx", _params ?? Params.Text);
-        }
-
-        private void Button3_Click(object sender, RoutedEventArgs e)
-        {
-            _runner.RunScript(@"C:\Users\amade\Documents\power.csx", _params ?? Params.Text);
+                    _runner.RunScript(script.path.ToString(), args);
+                    
+                    // display/save
+                    if (String.IsNullOrWhiteSpace(Params.Text))
+                    {
+                        Params.Text = args;
+                    }
+                    script.args = args;
+                };
+                Scripts.Children.Add(button);
+            }
         }
 
         private void Params_Click(object sender, RoutedEventArgs e)
@@ -75,6 +94,7 @@ namespace TaskScript.Wpf
             {
                 _params = Params.Text;
                 Params.Visibility = Visibility.Collapsed;
+                Settings.Save();
             }
             if (e.Key == Key.Escape)
             {
