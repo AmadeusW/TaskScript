@@ -9,11 +9,12 @@ namespace TaskScript.Wpf
 {
     class ScriptRunner
     {
-        private MainWindow _mainWindow;
+        INotifyUser _host;
+        Dictionary<string, Process> _processes = new Dictionary<string, Process>();
 
-        public ScriptRunner(MainWindow mainWindow)
+        public ScriptRunner(INotifyUser host)
         {
-            this._mainWindow = mainWindow;
+            _host = host;
         }
 
         internal void RunScript(string path, string args = null)
@@ -34,19 +35,48 @@ namespace TaskScript.Wpf
                     StartInfo = startInfo
                 })
                 { 
-                    process.OutputDataReceived += (s, e) => _mainWindow.Output = e.Data;
+                    process.OutputDataReceived += (s, e) => _host.Output = e.Data;
                     process.Start();
-                    process.BeginOutputReadLine();
-
-                    //_process.StandardInput.WriteLine($);
+                    //process.BeginOutputReadLine();
+                    _processes.Add(path, process);
 
                     process.WaitForExit();
+                    var code = process.ExitCode;
+                    if (process.ExitCode == 0)
+                    {
+                        _host.NotifyOfSuccess(path);
+                    }
+                    else
+                    {
+                        _host.NotifyOfError(path);
+                    }
+                    Stop(path);
                 }
             });
         }
 
+        internal void Stop(string path)
+        {
+            if (_processes.ContainsKey(path))
+            {
+                var process = _processes[path];
+                if (!process.HasExited)
+                    process.Kill();
+
+                _processes.Remove(path);
+            }
+        }
+
         internal void Stop()
         {
+            foreach (var processInfo in new Dictionary<string, Process>(_processes))
+            {
+                var process = processInfo.Value;
+                if (!process.HasExited)
+                    process.Kill();
+
+                _processes.Remove(processInfo.Key);
+            }
             // TODO: keep track of open processes and kill them
         }
     }

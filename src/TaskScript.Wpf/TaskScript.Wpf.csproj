@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="INotifyUser.cs" />
     <Compile Include="ScriptRunner.cs" />
     <Compile Include="Settings.cs" />
     <Page Include="MainWindow.xaml">
